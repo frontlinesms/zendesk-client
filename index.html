@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Zendesk Inline Help</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"></link>	
+	</head>
+	<body>
+		<div class="container articles">
+			<div class="row pagination"></div>
+			<div class="row">
+				<div class="col-md-6 article-list">
+					<h2>Articles</h2>
+					<div class="content">Loading.....</div>
+				</div>
+				<div class="col-md-6 article-content"></div>
+			</div>
+		</div>
+	</body>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="app.js"></script>
+	
+	<!--Handlebars-->
+	<script id="article-list-handlebar" type="text/x-handlebars-template">
+		<ul class="articles">
+			{{#each this}}	
+			<li class="article" data-article-id="{{id}}">
+				<strong><a href="#">{{id}}</a></strong>
+				<span>{{title}}</span>
+			</li>
+			{{/each}}
+		</ul>
+	</script>
+
+	<script id="pagination-container" type="text/x-handlebars-template">
+		<nav>
+			<ul class="pagination">
+				{{#each this}}
+				<li>
+					<a href="#" class="page" data-page-id="{{this}}">
+						<span>{{this}}</span>
+					</a>
+				</li>
+				{{/each}}
+			</ul>
+		</nav>
+	</script>
+
+	<script id="article-view" type="text/x-handlebars-template">
+		<div>
+			<div class="meta-data">
+				{{#if draft}}<span class="label label-info">Draft</span>{{/if}}
+				{{#if outdated}}<span class="label label-info">Outdated</span>{{/if}}
+				<div>Created : {{created_at}}</div>
+				<div>Updated : {{updated_at}}</div>
+			</div>
+			<h1>{{title}}</h1>
+			<div>{{{body}}}</div>
+		</div>
+	</script>
+</html>
