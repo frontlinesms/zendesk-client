@@ -16,11 +16,7 @@ var InAppZendesk = function () {
 		})
 	},
 	displayArticles = function (articlesJson) {
-		var source = $("#article-list-handlebar").html();
-		var template = Handlebars.compile(source);
-		var html = template(articlesJson.articles);
-		listArticlesContainer.html(html);
-
+		renderArticles(articlesJson.articles);
 		var pages = [];
 		for (var i = 1; i <= articlesJson.page_count; i++) {
 			pages.push(i);	
@@ -34,6 +30,12 @@ var InAppZendesk = function () {
 		$('.page').on("click", handlePageChange);
 		$('.article').on("click", handleArticleSelecton);
 	},
+	renderArticles = function (articles) {
+		var source = $("#article-list-handlebar").html();
+		var template = Handlebars.compile(source);
+		var html = template(articles);
+		listArticlesContainer.html(html);
+	},
 	handlePageChange = function () {
 		var element = $(this),
 		pageId = element.data("page-id"),
@@ -43,23 +45,33 @@ var InAppZendesk = function () {
 	handleArticleSelecton = function () {
 		var element = $(this),
 		articleId = element.data("article-id");
-		articleData = {};
-		for(var i=0; i < articlesJson.articles.length; i++) {
-			if(articlesJson.articles[i].id == articleId) {
-				articleData = articlesJson.articles[i];
-				break;
+		$.ajax({
+			type:'GET',
+			url:'https://frontlinecloud.zendesk.com/api/v2/help_center/articles/'+articleId+'.json',
+			success: function (data) {
+				var source = $("#article-view").html();
+				var template = Handlebars.compile(source);
+				var html = template(data.article);
+				articleContent.html(html);
 			}
-		}
-		var source = $("#article-view").html();
-		var template = Handlebars.compile(source);
-		var html = template(articleData);
-		articleContent.html(html);
+		})	
 	},
 	searchForArticle = function () {
-		// TODO
+		var queryString = $(".query").val();
+		$.ajax({
+			type:'GET',
+			url:'https://frontlinecloud.zendesk.com/api/v2/help_center/articles/search.json',
+			data : { query : queryString },
+			success: function (data) {
+				articlesJson = data;
+				renderArticles(data.results);
+				$('.article').on("click",handleArticleSelecton);
+			}
+		})
 	},
 	init = function () {
 		loadArticles({});
+		$('.search').on("click", searchForArticle);
 	};
 	init();
 }

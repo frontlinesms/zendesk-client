@@ -2,10 +2,21 @@
 <html lang="en">
 	<head>
 		<title>Zendesk Inline Help</title>
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"></link>	
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"></link>
+		<link href="app.css" rel="stylesheet"></link>
 	</head>
 	<body>
 		<div class="container articles">
+			<div class="row search-container">
+				<div class="col-md-6">
+					<div class="input-group">
+						<input type="text" class="query form-control" placeholder="Search for...">
+						<span class="input-group-btn">
+							<button class="search btn btn-default" type="button">Go!</button>
+						</span>
+					</div>
+				</div>		
+			</div>
 			<div class="row pagination"></div>
 			<div class="row">
 				<div class="col-md-6 article-list">
