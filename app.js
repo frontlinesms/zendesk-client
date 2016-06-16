@@ -1,10 +1,12 @@
 var InAppZendesk = function () {
-	var url = "https://frontlinecloud.zendesk.com/api/v2/help_center/articles.json",
+	var url = "https://frontlinecloud.zendesk.com/api/v2/help_center/en-us/articles.json",
 	articlesJson = {},
 	listArticlesContainer = $(".article-list .content"),
 	paginationContainer = $(".pagination"),
 	articleContent = $(".article-content"),	
 	loadArticles = function (params) {
+		var defaultParams = { sort_by:'title', sort_order:'asc' };
+		$.extend(params, defaultParams);
 		$.ajax({
 			type : 'GET',
 			url : url,
