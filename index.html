@@ -21,7 +21,6 @@
 			<div class="row pagination"></div>
 			<div class="row">
 				<div class="col-md-6 article-list">
-					<h2>Articles</h2>
 					<div class="content">Loading.....</div>
 				</div>
 				<div class="col-md-6 article-content"></div>
@@ -35,9 +34,9 @@
 	
 	<!--Handlebars-->
 	<script id="article-list-handlebar" type="text/x-handlebars-template">
-		<ul class="articles">
+		<ul class="articles list-group">
 			{{#each this}}	
-			<li class="article" data-article-id="{{id}}">
+			<li class="article list-group-item" data-article-id="{{id}}">
 				<strong><a href="#">{{id}}</a></strong>
 				<span>{{title}}</span>
 			</li>

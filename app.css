@@ -1,3 +1,7 @@
 .search-container {
 	margin-top: 50px;
 }
+
+.article {
+	cursor: pointer;
+}
