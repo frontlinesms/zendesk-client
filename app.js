@@ -1,7 +1,6 @@
 var InAppZendesk = function () {
 	var allArticlesUrl = "https://frontlinecloud.zendesk.com/api/v2/help_center/en-us/articles.json",
 	searchUrl = 'https://frontlinecloud.zendesk.com/api/v2/help_center/articles/search.json',
-	articlesJson = {},
 	listArticlesContainer = $(".article-list .content"),
 	paginationContainer = $(".pagination"),
 	articleContent = $(".article-content"),
@@ -13,7 +12,6 @@ var InAppZendesk = function () {
 			url : allArticlesUrl,
 			data : params,
 			success : function (data) {
-				articlesJson = data;
 				displayArticles(data);
 			}
 		})
@@ -56,7 +54,6 @@ var InAppZendesk = function () {
 			url: searchUrl,
 			data : { query : queryString },
 			success: function (data) {
-				articlesJson = data;
 				renderArticles(data.results);
 				$('.article').on("click",handleArticleSelecton);
 			}
