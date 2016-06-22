@@ -1,15 +1,16 @@
 var InAppZendesk = function () {
-	var url = "https://frontlinecloud.zendesk.com/api/v2/help_center/en-us/articles.json",
+	var allArticlesUrl = "https://frontlinecloud.zendesk.com/api/v2/help_center/en-us/articles.json",
+	searchUrl = 'https://frontlinecloud.zendesk.com/api/v2/help_center/articles/search.json',
 	articlesJson = {},
 	listArticlesContainer = $(".article-list .content"),
 	paginationContainer = $(".pagination"),
-	articleContent = $(".article-content"),	
+	articleContent = $(".article-content"),
 	loadArticles = function (params) {
 		var defaultParams = { sort_by:'title', sort_order:'asc' };
 		$.extend(params, defaultParams);
 		$.ajax({
 			type : 'GET',
-			url : url,
+			url : allArticlesUrl,
 			data : params,
 			success : function (data) {
 				articlesJson = data;
@@ -23,20 +24,13 @@ var InAppZendesk = function () {
 		for (var i = 1; i <= articlesJson.page_count; i++) {
 			pages.push(i);	
 		}
-		source = $("#pagination-container").html();
-		template = Handlebars.compile(source);
-		html = template(pages);
-		paginationContainer.html(html);
-		
+		renderHandlebar("#pagination-container", paginationContainer, pages);
 		$(".page[data-page-id="+ articlesJson.page +"]").closest("li").addClass("active");
 		$('.page').on("click", handlePageChange);
 		$('.article').on("click", handleArticleSelecton);
 	},
 	renderArticles = function (articles) {
-		var source = $("#article-list-handlebar").html();
-		var template = Handlebars.compile(source);
-		var html = template(articles);
-		listArticlesContainer.html(html);
+		renderHandlebar("#article-list-handlebar", listArticlesContainer, articles);
 	},
 	handlePageChange = function () {
 		var element = $(this),
@@ -51,18 +45,15 @@ var InAppZendesk = function () {
 			type:'GET',
 			url:'https://frontlinecloud.zendesk.com/api/v2/help_center/articles/'+articleId+'.json',
 			success: function (data) {
-				var source = $("#article-view").html();
-				var template = Handlebars.compile(source);
-				var html = template(data.article);
-				articleContent.html(html);
+				renderHandlebar("#article-view", articleContent, data.article);
 			}
 		})	
 	},
 	searchForArticle = function () {
 		var queryString = $(".query").val();
 		$.ajax({
-			type:'GET',
-			url:'https://frontlinecloud.zendesk.com/api/v2/help_center/articles/search.json',
+			type: 'GET',
+			url: searchUrl,
 			data : { query : queryString },
 			success: function (data) {
 				articlesJson = data;
@@ -70,6 +61,12 @@ var InAppZendesk = function () {
 				$('.article').on("click",handleArticleSelecton);
 			}
 		})
+	},
+	renderHandlebar = function (handlebarId, container, data) {
+		var source = $(handlebarId).html();
+		var template = Handlebars.compile(source);
+		var html = template(data);
+		container.html(html);
 	},
 	init = function () {
 		loadArticles({});
